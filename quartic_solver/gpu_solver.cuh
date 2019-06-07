@@ -1,0 +1,27 @@
+#ifndef GPU_SOLVER_CUH //using instead of #pragma once for greater compatibility
+#define GPU_SOLVER_CUH
+
+__global__
+void cubicSolver(int n, float *A, float *B, float *C, float *D, float *Q, float *R, float *del, float *theta, float *sqrtQ,
+	float *x1, float *x2, float *x3, float *x1_img, float *x2_img, float *x3_img);
+
+__global__
+void QRdel(int n, float *A, float *B, float *C, float *D, float *b, float *c, float *d, float *Q, float *R, float *Qint, float *Rint, float *del);
+__global__
+void QRdel2(int n, float *A, float *B, float *C, float *D, float *b, float *c, float *d, float *Q, float *R, float *del);
+
+
+__global__
+void QuarticSolver(int n, float *A, float *B, float *C, float *D, float *b, float *Q, float *R, float *del, float *theta, float *sqrtQ,
+	float *x1, float *x2, float *x3, float *temp, float *min);
+__global__
+void QuarticSolver2(int n, float *A, float *B, float *C, float *D, float *b, float *Q, float *R, float *del, float *theta, float *sqrtQ,
+	float *x1, float *x2, float *x3, float *temp, float *min);
+
+__global__
+void QuarticSolver_full(int n, float *A, float *B, float *C, float *D, float *b, float *c, float *d, float *Q, float *R, float *del, float *theta, float *sqrtQ,
+	float *x1, float *x2, float *x3, float *temp, float *min);
+
+#endif
+
+
