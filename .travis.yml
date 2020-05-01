@@ -1,0 +1,17 @@
+language: python
+python:
+ - 3.6
+ 
+addons:
+  apt:
+    update: true
+    packages:
+    - cmake
+    
+install:
+ - pip install pytest
+ - python setup.py bdist_wheel --GPU_build False
+ - pip install ./dist/*.whl
+ 
+script: 
+ - python ./tests/pythontests.py

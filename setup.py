@@ -13,7 +13,6 @@ class CMakeExtension(Extension):
         Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
 
-
 class CMakeBuild(build_ext):
     def run(self):
         try:
@@ -65,17 +64,32 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
 if __name__=="__main__":
+    gpu_build = 'False'
     if '--GPU_build' in sys.argv:
         index = sys.argv.index('--GPU_build')
         sys.argv.pop(index)  # Removes the '--GPU_build'
         gpu_build = sys.argv.pop(index)  # Returns the element after the '--GPU_build'
     setup(
         name='QuarticSolver',
-        version='0.1.1',
-        author='zq',
-        author_email='zq@gmail.com',
+        version='0.1.3',
         description='A CPU/GPU library for finding the minimum of a quartic function',
-        long_description='',
+        long_description='A CPU/GPU library for finding the minimum of a quartic function',
+        author='Zawar Qureshi',
+        author_email='qureshizawar@gmail.com',
+        url = 'https://github.com/qureshizawar/CUDA-quartic-solver',
+        download_url = 'https://github.com/qureshizawar/CUDA-quartic-solver/archive/v_013.tar.gz',
+        keywords = ['CUDA', 'QUARTIC', 'OPTIMISATION'],
+        install_requires=[
+             'numpy',
+           ],
+        classifiers=[
+            'Development Status :: 3 - Alpha',      # "3 - Alpha", "4 - Beta" or "5 - Production/Stable"
+            'Intended Audience :: Developers',
+            'Topic :: Software Development :: Build Tools',
+            'License :: OSI Approved :: MIT License',
+            'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
+          ],
         ext_modules=[CMakeExtension('QuarticSolver')],
         cmdclass=dict(build_ext=CMakeBuild),
         zip_safe=False,
