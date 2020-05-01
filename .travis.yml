@@ -1,0 +1,19 @@
+language: python
+python:
+ - 3.6
+ 
+dist: bionic
+addons:
+  apt:
+    update: true
+    packages:
+    - cmake
+    - python-dev python-pip python-tk python-lxml python-six python-setuptools python-wheel
+    
+install:
+ - pip install pytest
+ - python setup.py bdist_wheel --GPU_build False
+ - pip install ./dist/*.whl
+ 
+script: 
+ - pytest -q ./tests/pythontests.py
