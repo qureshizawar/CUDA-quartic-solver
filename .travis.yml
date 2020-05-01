@@ -11,10 +11,9 @@ addons:
     - python-dev python-pip python-tk python-lxml python-six python-setuptools python-wheel
     
 install:
- - python --version
  - pip install pytest
  - python setup.py bdist_wheel --GPU_build False
  - pip install ./dist/*.whl
  
 script: 
- - python ./tests/pythontests.py
+ - pytest -q ./tests/pythontests.py
