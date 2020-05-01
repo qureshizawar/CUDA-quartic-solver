@@ -2,17 +2,19 @@ language: python
 python:
  - 3.6
  
+dist: bionic
 addons:
   apt:
     update: true
     packages:
     - cmake
-    - python3-dev python3-pip python3-tk python3-lxml python3-six python3-setuptools python3-wheel
+    - python-dev python-pip python-tk python-lxml python-six python-setuptools python-wheel
     
 install:
- - pip3 install pytest
- - python3 setup.py bdist_wheel --GPU_build False
- - pip3 install ./dist/*.whl
+ - python --version
+ - pip install pytest
+ - python setup.py bdist_wheel --GPU_build False
+ - pip install ./dist/*.whl
  
 script: 
- - python3 ./tests/pythontests.py
+ - python ./tests/pythontests.py
