@@ -1,7 +1,6 @@
 language: python
 python:
- - 3.6
- 
+- 3.6
 dist: bionic
 addons:
   apt:
@@ -9,11 +8,16 @@ addons:
     packages:
     - cmake
     - python-dev python-pip python-tk python-lxml python-six python-setuptools python-wheel
-    
 install:
- - pip install pytest
- - python setup.py bdist_wheel --GPU_build False
- - pip install ./dist/*.whl
- 
-script: 
- - pytest -q ./tests/pythontests.py
+- pip install pytest
+- python setup.py bdist_wheel --GPU_build False
+- pip install ./dist/*.whl
+script:
+- pytest -q ./tests/pythontests.py
+
+deploy:
+  provider: pypi
+  distributions: "bdist_wheel"
+  skip_existing: true
+  password:
+    secure: nl6P5WOYeCmMcsXH/+39HcN+g8OJ8+jCI0d2fJ/ALVPOGqw2TCWXUEnprSoUmRdYGT3bBIITZKdfpp0FL23lXc7/c7cHTH5vHa8cvYbJmUEVH2axbYirqaOTLPe2BYLca2lpMNp9CoqjUFmXPMPhUmNP0agz3m8VlmBo8XoVkjYPgnlneceRWNrbmShwqv+1M80N9l/LWx2C3qs2NVbwILjqgIN3naY1ZEH22ieIQ/EugeFFKJy9/T0vkihgX/1D+cXLEwlCzjUiRgq26B1s8ryxtxe8pw0DVsHwWhcYKDeOcbTkW6jVtV9DXvENHOe4/nMvFQ689p4hSTJcAlOgebzQIbbdqcFoj1SRcLFrCWnMRV68dg2sGD8NFYrz939fWHbE0Age5voy7jqf6mYx2Xz8kFI9PyXCPkL0OVraCMe+oO4Xhf4JO7ukP2UsYkIhTpUZkOHwzS/axXRXFjqxrfQq9++o3BiDvslSy7+plLKVIr8yS46puk6UxxVnwVthmw9dAGlMJzCa59vCPEjaO6LJ9UjdKFBNNNZuqTQyGHMG9/REA22BAbls4QF8A9K7cXAXDOlGistAi8e7Kiht2rpO7HEy+uNGLvmN9FOhCkMxZbvTz90o8H5zQPNCcBhOU5imyM4D8uJgMipWaU6d6JGeJZzZVBQqhjRLAdL5UcU=
