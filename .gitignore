@@ -262,3 +262,5 @@ __pycache__/
 
 # CMAKE build
 build
+/cmake-build-debug/
+/cmake-build-cpp-cpu/

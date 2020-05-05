@@ -52,6 +52,10 @@ else()
     find_package(PythonInterp 3.6 REQUIRED)
     find_package(PythonLibs 3.6 REQUIRED)
 
+    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+
     include_directories(
         ${PYTHON_INCLUDE_DIRS}
         ./pybind11/include
