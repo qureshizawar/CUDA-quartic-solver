@@ -12,6 +12,7 @@ A general cubic equation solver and quartic equation minimisation solver written
 1) CUDA 9.0+ capable GPU required to run the GPU solvers
 2) CMake 3.8+ 
 3) Python 3.6, numpy (if using Python)
+4) Pybind11 v2.5.0+ ([installation instructions](https://stackoverflow.com/a/56552686))
 
 ### CMake
 
