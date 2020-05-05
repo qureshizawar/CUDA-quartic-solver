@@ -99,7 +99,7 @@ pybind11::array_t<T> QuarticMinimum(pybind11::array_t<T> A, pybind11::array_t<T>
         esstream
                 << "WARNING: use_gpu set to True, this package was built with CPU only option please build package with GPU to use GPU capability"
                 << std::endl;
-        throw std::runtime_error(esstream.str());
+        std::cout << esstream.str() << std::endl;
     }
 
     QuarticMinimumCPU(size, aptr, bptr, cptr, dptr, eptr, min_x);
