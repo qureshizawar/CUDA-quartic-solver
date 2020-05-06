@@ -4,6 +4,8 @@ import sys
 import platform
 import subprocess
 
+from os import path
+
 from setuptools import setup, Extension, Command
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
@@ -64,20 +66,26 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
 if __name__=="__main__":
+    # read the contents of README file
+    this_directory = path.abspath(path.dirname(__file__))
+    with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+        long_description = f.read()
+
     gpu_build = 'False'
     if '--GPU_build' in sys.argv:
         index = sys.argv.index('--GPU_build')
         sys.argv.pop(index)  # Removes the '--GPU_build'
         gpu_build = sys.argv.pop(index)  # Returns the element after the '--GPU_build'
+
     setup(
         name='QuarticSolver',
-        version='0.1.3',
+        version='0.1.4',
         description='A CPU/GPU library for finding the minimum of a quartic function',
-        long_description='A CPU/GPU library for finding the minimum of a quartic function',
+        long_description=long_description,
+        long_description_content_type='text/markdown',
         author='Zawar Qureshi',
         author_email='qureshizawar@gmail.com',
         url = 'https://github.com/qureshizawar/CUDA-quartic-solver',
-        download_url = 'https://github.com/qureshizawar/CUDA-quartic-solver/archive/v_013.tar.gz',
         keywords = ['CUDA', 'QUARTIC', 'OPTIMISATION'],
         install_requires=[
              'numpy',
@@ -85,10 +93,9 @@ if __name__=="__main__":
         classifiers=[
             'Development Status :: 3 - Alpha',      # "3 - Alpha", "4 - Beta" or "5 - Production/Stable"
             'Intended Audience :: Developers',
-            'Topic :: Software Development :: Build Tools',
+            'Topic :: Software Development',
             'License :: OSI Approved :: MIT License',
             'Programming Language :: Python :: 3.6',
-            'Programming Language :: Python :: 3.7',
           ],
         ext_modules=[CMakeExtension('QuarticSolver')],
         cmdclass=dict(build_ext=CMakeBuild),

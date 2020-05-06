@@ -21,10 +21,10 @@ if(GPU_build)
       )
 
 
-    # Request that QuarticSolver be built with -std=c++11
+    # Request that QuarticSolver be built with -std=c++14
     # As this is a public compile feature anything that links to QuarticSolver
     # will also build with -std=c++11
-    target_compile_features(QuarticSolver PUBLIC cxx_std_11)
+    target_compile_features(QuarticSolver PUBLIC cxx_std_14)
 
     target_compile_options(QuarticSolver PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-gencode arch=compute_61,code=sm_61>)
 
@@ -49,35 +49,35 @@ if(GPU_build)
 
 else()
     project(QuarticSolver CXX)
-    find_package(PythonInterp 3.6 REQUIRED)
-    find_package(PythonLibs 3.6 REQUIRED)
 
-    set(CMAKE_CXX_STANDARD 14)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    set(CMAKE_CXX_EXTENSIONS OFF)
-
-    include_directories(
-        ${PYTHON_INCLUDE_DIRS}
-        ./pybind11/include
-        )
-
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
-    add_library(QuarticSolver SHARED
-      src/cpu_main.cpp
-      src/cpu_solver.cpp
-      src/cpu_solver.h
-      src/utils.cpp
-      src/utils.h)
+    if( CPP_exe ) 
+      # build a c++ executable
       
-      if( CPP_exe ) 
-        # build a c++ executable
-        add_executable(quartic_solver_main src/cpu_main.cpp)
-        target_link_libraries(quartic_solver_main PRIVATE QuarticSolver)
-      endif()
+      set(CMAKE_CXX_STANDARD 14)
+      set(CMAKE_CXX_STANDARD_REQUIRED ON)
+      set(CMAKE_CXX_EXTENSIONS OFF)
 
-    target_link_libraries(QuarticSolver
-      ${PYTHON_LIBRARIES})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+      add_library(QuarticSolver SHARED
+        src/cpu_main.cpp
+        src/cpu_solver.cpp
+        src/cpu_solver.h
+        src/utils.cpp
+        src/utils.h)
+      add_executable(quartic_solver_main src/cpu_main.cpp)
+      target_link_libraries(quartic_solver_main PRIVATE QuarticSolver)
+      set_target_properties(QuarticSolver PROPERTIES PREFIX "")
 
-    set_target_properties(QuarticSolver PROPERTIES PREFIX "")
+    else()
+    
+      add_subdirectory(pybind11)
+      pybind11_add_module(QuarticSolver
+        src/cpu_main.cpp
+        src/cpu_solver.cpp
+        src/cpu_solver.h
+        src/utils.cpp
+        src/utils.h) 
+
+    
+    endif()
 endif()

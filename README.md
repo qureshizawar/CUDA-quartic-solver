@@ -2,6 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/qureshizawar/CUDA-quartic-solver)
 [![Build Status](https://travis-ci.org/qureshizawar/CUDA-quartic-solver.svg?branch=master)](https://travis-ci.org/qureshizawar/CUDA-quartic-solver)
+![PyPI](https://img.shields.io/pypi/v/QuarticSolver)
 
 A general cubic equation solver and quartic equation minimisation solver written for CPU and Nvidia GPUs, for more details and results, see: https://arxiv.org/abs/1903.10041. The library is available for C++/CUDA as well as Python using Pybind11.
 
