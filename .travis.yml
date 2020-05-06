@@ -69,18 +69,18 @@ jobs:
         python3 -m pip install twine
         python3 -m twine upload --skip-existing wheelhouse/*.whl
     # Deploy on windows
-    - stage: deploy
-      name: Build and deploy Windows wheels
-      env:
-        - CIBW_BEFORE_BUILD="pip install cmake"
-        - CIBW_BUILD=cp36*
-      os: windows
-      language: shell
-      install: python -m pip install cibuildwheel==1.4.1
-      script: python -m cibuildwheel --output-dir wheelhouse
-      after_success: |
-        python -m pip install twine
-        python -m twine upload --skip-existing wheelhouse/*.whl
+    #- stage: deploy
+    #  name: Build and deploy Windows wheels
+    #  env:
+    #    - CIBW_BEFORE_BUILD="pip install cmake"
+    #    - CIBW_BUILD=cp36*
+    #  os: windows
+    #  language: shell
+    #  install: python -m pip install cibuildwheel==1.4.1
+    #  script: python -m cibuildwheel --output-dir wheelhouse
+    #  after_success: |
+    #    python -m pip install twine
+    #    python -m twine upload --skip-existing wheelhouse/*.whl
 
 env:
   global:

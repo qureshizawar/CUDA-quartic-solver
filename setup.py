@@ -4,6 +4,8 @@ import sys
 import platform
 import subprocess
 
+from os import path
+
 from setuptools import setup, Extension, Command
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
