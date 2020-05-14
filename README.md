@@ -10,8 +10,8 @@ A general cubic equation solver and quartic equation minimisation solver written
 
 ### Requirements
 
-1) CUDA 9.0+ capable GPU required to run the GPU solvers
-2) CMake 3.8+ 
+1) CUDA 9.0+ capable GPU and nvcc required to run the GPU solvers
+2) CMake 3.8+
 3) Python 3.6, numpy (if using Python)
 4) Pybind11 v2.5.0+ ([installation instructions](https://stackoverflow.com/a/56552686))
 
@@ -19,23 +19,23 @@ A general cubic equation solver and quartic equation minimisation solver written
 
 CMake can be used to build the project, for example:
 ```
+git clone --recursive https://github.com/qureshizawar/CUDA-quartic-solver
 mkdir build && cd build
 cmake -D CMAKE_BUILD_TYPE=Release ../ -D CPP_exe=true -D GPU_build=false
 make
 ```
 
 When the `CPP_exe` flag is set to `true`, CMake will build a c++ executable, then ```quartic_solver_main``` can be executed to run the example code.
-When the `GPU_build` flag is set to `true`, CMake will build the CUDA capable version of the library
+When the `GPU_build` flag is set to `true`, CMake will build the CUDA capable version of the library.
 
 ### Python
 
-By default, CMake will also build the Python version of the library which can be directly imported from the `build` folder
-
-The Python package can also be installed by building its `.whl` file, for example:
+The Python package can be installed by building its `.whl` file, for example:
 ```
+git clone --recursive https://github.com/qureshizawar/CUDA-quartic-solver
 python setup.py bdist_wheel --GPU_build True
 ```
-When the `GPU_build` flag is set to `True`, the CUDA capable version of the library will be built
+When the `GPU_build` flag is set to `True`, the CUDA capable version of the library will be built.
 The built `.whl` can then be used to install the package, for example:
 ```
 pip install ./dist/QuarticSolver-0.1.1-cp36-cp36m-linux_x86_64.whl

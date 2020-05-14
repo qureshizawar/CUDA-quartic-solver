@@ -12,6 +12,10 @@
 #include "gpu_solver.cuh"
 #include "utils.h"
 
+#include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
+
 void dry_run(int N){
 
         std::cout << "######################################################" << std::endl;
@@ -134,8 +138,94 @@ void dry_run(int N){
         std::cout << "######################################################" << std::endl;
 
         printf("Speedup Tcpu/Tgpu: %f \n", avg_cpu / avg);
+
+        checkCuda(cudaFreeHost(A));
+        checkCuda(cudaFreeHost(B));
+        checkCuda(cudaFreeHost(C));
+        checkCuda(cudaFreeHost(D));
+        checkCuda(cudaFreeHost(E));
+        checkCuda(cudaFreeHost(min));
 }
 
+template <typename T>
+pybind11::array_t<T> QuarticMinimum(pybind11::array_t<T> A, pybind11::array_t<T> B,
+                                    pybind11::array_t<T> C, pybind11::array_t<T> D, pybind11::array_t<T> E, bool use_gpu)
+{
+        pybind11::buffer_info bufA = A.request();
+        pybind11::buffer_info bufB = B.request();
+        pybind11::buffer_info bufC = C.request();
+        pybind11::buffer_info bufD = D.request();
+        pybind11::buffer_info bufE = E.request();
+
+        if (bufA.ndim != 1 || bufB.ndim != 1 || bufC.ndim != 1 || bufD.ndim != 1 || bufE.ndim != 1)
+                throw std::runtime_error("Number of dimensions must be one");
+
+        if (bufA.size != bufB.size || bufA.size != bufC.size || bufA.size != bufD.size || bufA.size != bufE.size)
+                throw std::runtime_error("Input shapes must match");
+
+        int size = bufA.shape[0];
+        //int size_bytes = size*sizeof(T);
+
+        T* aptr = reinterpret_cast<T*>(bufA.ptr);
+        T* bptr = reinterpret_cast<T*>(bufB.ptr);
+        T* cptr = reinterpret_cast<T*>(bufC.ptr);
+        T* dptr = reinterpret_cast<T*>(bufD.ptr);
+        T* eptr = reinterpret_cast<T*>(bufE.ptr);
+
+        /* No pointer is passed, so NumPy will allocate the buffer */
+        auto result = pybind11::array_t<T>(bufA.size);
+        pybind11::buffer_info bufRes = result.request();
+
+        T* min_x = (T*) bufRes.ptr;
+
+        if (use_gpu) {
+                if(size<1000) {
+                        //std::cout<<"using CPU"<<std::endl;
+                        QuarticMinimumCPU(size, aptr, bptr, cptr, dptr, eptr, min_x);
+                }
+                else if (size<10000) {
+                        //std::cout<<"using GPU"<<std::endl;
+                        QuarticMinimumGPU(size, aptr, bptr, cptr, dptr, eptr, min_x);
+                }
+                else{
+                        //std::cout<<"using GPU with streams"<<std::endl;
+                        QuarticMinimumGPUStreams(size, aptr, bptr, cptr, dptr, eptr, min_x);
+                }
+        }
+        else{
+                //std::cout<<"using CPU"<<std::endl;
+                QuarticMinimumCPU(size, aptr, bptr, cptr, dptr, eptr, min_x);
+        }
+
+
+        return result;
+}
+
+PYBIND11_MODULE(QuarticSolver, m) {
+        m.doc() = R"pbdoc(
+        Pybind11 QuarticSolver plugin
+        -----------------------
+        .. currentmodule:: QuarticSolver
+        .. autosummary::
+           :toctree: _generate
+           dry_run
+           QuarticMinimum
+    )pbdoc";
+
+        m.def("dry_run", &dry_run, R"pbdoc(
+        A quick test to evaluate overall functionality and performance.
+    )pbdoc");
+        m.def("QuarticMinimum", &QuarticMinimum<float>, R"pbdoc(
+        Takes the coefficients for a quartic function as a numpy array,
+        calculates the corresponding minimums and returns results as a numpy array.
+        Final arg is a boolean which sets whether to use the GPU or not.
+    )pbdoc");
+    #ifdef VERSION_INFO
+        m.attr("__version__") = VERSION_INFO;
+    #else
+        m.attr("__version__") = "dev";
+    #endif
+}
 
 int main(void)
 {
