@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/qureshizawar/CUDA-quartic-solver)
 [![Build Status](https://travis-ci.org/qureshizawar/CUDA-quartic-solver.svg?branch=master)](https://travis-ci.org/qureshizawar/CUDA-quartic-solver)
-![PyPI](https://img.shields.io/pypi/v/QuarticSolver)
+[![PyPI](https://img.shields.io/pypi/v/QuarticSolver)](https://pypi.org/project/QuarticSolver/)
 
 A general cubic equation solver and quartic equation minimisation solver written for CPU and Nvidia GPUs, for more details and results, see: https://arxiv.org/abs/1903.10041. The library is available for C++/CUDA as well as Python using Pybind11.
 
@@ -29,8 +29,11 @@ When the `CPP_exe` flag is set to `true`, CMake will build a c++ executable, the
 When the `GPU_build` flag is set to `true`, CMake will build the CUDA capable version of the library.
 
 ### Python
-
-The Python package can be installed by building its `.whl` file, for example:
+The Python package can be installed via PyPI:
+```
+pip install QuarticSolver
+```
+Or package can be installed by building its `.whl` file, for example:
 ```
 git clone --recursive https://github.com/qureshizawar/CUDA-quartic-solver
 python setup.py bdist_wheel --GPU_build True
