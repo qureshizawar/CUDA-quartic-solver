@@ -47,7 +47,8 @@ jobs:
       env:
         #- CIBW_MANYLINUX_X86_64_IMAGE="manylinux1"
         #- CIBW_BEFORE_BUILD="pip install cmake"
-        - CIBW_BUILD=cp36*
+        #- CIBW_BUILD=cp36*
+        - CIBW_SKIP: cp27-*
       services: docker
       install:
         - python3 -m pip install cibuildwheel==1.4.1
@@ -60,7 +61,8 @@ jobs:
       name: Build and deploy macOS wheels
       env:
         #- CIBW_BEFORE_BUILD="pip install cmake"
-        - CIBW_BUILD=cp36*
+        #- CIBW_BUILD=cp36*
+        - CIBW_SKIP: cp27-*
       os: osx
       language: shell
       install: python3 -m pip install cibuildwheel==1.4.1
@@ -73,7 +75,8 @@ jobs:
       name: Build and deploy Windows wheels
       env:
         #- CIBW_BEFORE_BUILD="pip install cmake"
-        - CIBW_BUILD=cp36*
+        #- CIBW_BUILD=cp36*
+        - CIBW_SKIP: cp27-*
       os: windows
       language: shell
       before_install:
